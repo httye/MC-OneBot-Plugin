@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mc_onebot"
+version = "0.3.0"
+description = "Minecraft OneBot plugin for AstrBot - QQ-Minecraft Account Binding"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+dependencies = [
+    "astrbot-framework>=0.4.0",
+    "nonebot2>=2.0.0",
+    "nonebot-adapter-onebot>=2.0.0",
+    "websockets>=11.0"
+]
+
+[project.entry-points."astrbot.plugins"]
+"mc_onebot" = "mc_onebot:register"

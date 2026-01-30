@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Java/Maven
+target/
+*.jar
+*.war
+*.ear
+hs_err_pid*
+.recommenders
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+venv/
+env/
+ENV/
+
+# User data
+mc_bindings.json
+bindings.json
+
+# Minecraft
+world/
+world_nether/
+world_the_end/
+server.properties
+eula.txt

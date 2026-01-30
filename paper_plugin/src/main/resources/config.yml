@@ -1,0 +1,37 @@
+# MC Binding Plugin Configuration
+websocket:
+  enabled: true
+  server_url: "ws://127.0.0.1:8080"
+  reconnect_interval: 5000
+  timeout: 30000
+
+database:
+  # 绑定数据存储方式
+  storage_type: "json"  # json or mysql
+  json_file: "bindings.json"
+  
+  # MySQL配置 (如果storage_type为mysql)
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "mc_binding"
+    username: "root"
+    password: "password"
+    use_ssl: false
+
+commands:
+  bindqq:
+    enabled: true
+    cooldown: 30  # 秒
+  unbindqq:
+    enabled: true
+  checkbind:
+    enabled: true
+
+messages:
+  bind_success: "✅ 绑定成功！QQ: {qq} 已绑定到 Minecraft: {minecraft}"
+  bind_failed: "❌ 绑定失败: {reason}"
+  already_bound: "⚠️ 你已经绑定了账号！"
+  not_bound: "❌ 你还没有绑定账号！"
+  unbind_success: "✅ 解绑成功！"
+  verification_success: "✅ 验证成功！"

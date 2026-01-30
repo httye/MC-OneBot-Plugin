@@ -1,0 +1,16 @@
+{
+  "minecraft_server": {
+    "host": "127.0.0.1",
+    "port": 25565,
+    "rcon_port": 25575,
+    "rcon_password": "",
+    "websocket_enabled": false,
+    "websocket_url": "ws://127.0.0.1:8080"
+  },
+  "plugin_settings": {
+    "enable_status_command": true,
+    "enable_player_list": true,
+    "enable_server_messages": true,
+    "command_prefix": "/mc"
+  }
+}

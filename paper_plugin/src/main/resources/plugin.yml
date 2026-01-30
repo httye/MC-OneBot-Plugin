@@ -1,0 +1,29 @@
+name: MCBinding
+version: ${project.version}
+main: com.example.mcbinding.MCBindingPlugin
+api-version: '1.20'
+description: QQ-Minecraft Account Binding Plugin
+author: Your Name
+commands:
+  bindqq:
+    description: Bind your QQ number to Minecraft account
+    usage: /bindqq <qq_number>
+    permission: mcbinding.bind
+  unbindqq:
+    description: Unbind your QQ number from Minecraft account
+    usage: /unbindqq
+    permission: mcbinding.unbind
+  checkbind:
+    description: Check your binding status
+    usage: /checkbind
+    permission: mcbinding.check
+permissions:
+  mcbinding.bind:
+    description: Allows binding QQ to Minecraft account
+    default: true
+  mcbinding.unbind:
+    description: Allows unbinding QQ from Minecraft account
+    default: true
+  mcbinding.check:
+    description: Allows checking binding status
+    default: true
