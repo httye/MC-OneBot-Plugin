@@ -3,6 +3,7 @@ package com.example.mcbinding;
 import com.example.mcbinding.commands.BindQQCommand;
 import com.example.mcbinding.commands.CheckBindCommand;
 import com.example.mcbinding.commands.UnbindQQCommand;
+import com.example.mcbinding.websocket.BindingWebSocketClient;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,6 +25,7 @@ public class MCBindingPlugin extends JavaPlugin implements Listener {
     private Map<String, String> qqBindings = new HashMap<>();
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private File bindingsFile;
+    private BindingWebSocketClient webSocketClient;
     
     @Override
     public void onEnable() {
@@ -42,12 +46,37 @@ public class MCBindingPlugin extends JavaPlugin implements Listener {
         }
         
         loadBindings();
+        
+        // 初始化Websocket客户端
+        initializeWebSocket();
     }
     
     @Override
     public void onDisable() {
         getLogger().info("MC Binding Plugin 已禁用！");
+        if (webSocketClient != null && webSocketClient.getConnection().isOpen()) {
+            webSocketClient.close();
+        }
         saveBindings();
+    }
+    
+    private void initializeWebSocket() {
+        try {
+            // 从配置文件读取Websocket服务器地址
+            String serverUrl = getConfig().getString("websocket.server_url", "ws://127.0.0.1:8080");
+            URI uri = new URI(serverUrl);
+            
+            webSocketClient = new BindingWebSocketClient(uri, this);
+            webSocketClient.connect();
+            
+            getLogger().info("Websocket客户端已连接到: " + serverUrl);
+        } catch (URISyntaxException e) {
+            getLogger().severe("Websocket URL格式错误: " + e.getMessage());
+        }
+    }
+    
+    public BindingWebSocketClient getWebSocketClient() {
+        return webSocketClient;
     }
     
     @EventHandler
@@ -66,11 +95,24 @@ public class MCBindingPlugin extends JavaPlugin implements Listener {
     public void addBinding(String qqId, String minecraftName) {
         qqBindings.put(qqId, minecraftName);
         saveBindings();
+        
+        // 通知AstrBot服务器绑定成功
+        if (webSocketClient != null && webSocketClient.isConnected()) {
+            webSocketClient.sendBindingSuccess(qqId, minecraftName);
+        }
     }
     
     public void removeBinding(String qqId) {
         qqBindings.remove(qqId);
         saveBindings();
+        
+        // 通知AstrBot服务器解绑
+        if (webSocketClient != null && webSocketClient.isConnected()) {
+            String minecraftName = getMinecraftByQQ(qqId);
+            if (minecraftName != null) {
+                webSocketClient.sendBindingRemoved(qqId, minecraftName);
+            }
+        }
     }
     
     public String getMinecraftByQQ(String qqId) {

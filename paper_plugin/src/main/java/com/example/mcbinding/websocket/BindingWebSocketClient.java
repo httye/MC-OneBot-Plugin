@@ -4,19 +4,20 @@ import com.example.mcbinding.MCBindingPlugin;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
+import org.java_websocket.WebSocket.READYSTATE;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.URI;
 import java.util.logging.Logger;
 
-public class WebSocketClient extends WebSocketClient {
+public class BindingWebSocketClient extends WebSocketClient {
     
     private MCBindingPlugin plugin;
     private Logger logger;
     private Gson gson = new Gson();
     private boolean connected = false;
     
-    public WebSocketClient(URI serverUri, MCBindingPlugin plugin) {
+    public BindingWebSocketClient(URI serverUri, MCBindingPlugin plugin) {
         super(serverUri);
         this.plugin = plugin;
         this.logger = plugin.getLogger();
@@ -56,7 +57,8 @@ public class WebSocketClient extends WebSocketClient {
     }
     
     public boolean isConnected() {
-        return connected && this.getReadyState() == org.java_websocket.WebSocket.READYSTATE.OPEN;
+        // 修复READYSTATE问题，使用正确的READYSTATE枚举
+        return connected && this.getReadyState() == READYSTATE.OPEN;
     }
     
     public void sendBindingSuccess(String qqId, String minecraftName) {
