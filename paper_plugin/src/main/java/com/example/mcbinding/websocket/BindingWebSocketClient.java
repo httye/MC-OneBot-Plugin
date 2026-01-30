@@ -4,7 +4,7 @@ import com.example.mcbinding.MCBindingPlugin;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
-import org.java_websocket.WebSocket.READYSTATE;
+import org.java_websocket.WebSocket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.URI;
@@ -57,8 +57,9 @@ public class BindingWebSocketClient extends WebSocketClient {
     }
     
     public boolean isConnected() {
-        // 修复READYSTATE问题，使用正确的导入路径
-        return connected && this.getReadyState() == READYSTATE.OPEN;
+        // 使用更安全的连接状态检查方式
+        WebSocket.READYSTATE readyState = this.getReadyState();
+        return connected && readyState == WebSocket.READYSTATE.OPEN;
     }
     
     public void sendBindingSuccess(String qqId, String minecraftName) {
